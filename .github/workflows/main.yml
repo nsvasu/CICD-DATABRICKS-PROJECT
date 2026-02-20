@@ -35,7 +35,7 @@ jobs:
       - name: Update Databricks Repo (Dev)
         run:
           databricks repos update "${{ env.REPO_PATH }}" \
-          --branch "${{ steps.extract_branch.output.branch }}"
+          --branch "${{ steps.extract_branch.outputs.branch }}"
 
   deploy-prod:
     needs: deploy-dev
@@ -65,5 +65,5 @@ jobs:
       - name: Update Databricks Repo (Prod)
         run:
           databricks repos update "${{ env.REPO_PATH }}" \
-          --branch "${{ steps.extract_branch.output.branch }}"
+          --branch "${{ steps.extract_branch.outputs.branch }}"
         
