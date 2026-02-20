@@ -41,9 +41,15 @@ jobs:
         id: get_repo
         run: |
           repo_id=$(databricks repos list --output json | \
-            jq -r '.repos[] | select(.path=="${{ env.REPO_PATH }}") | .id')
+            jq -r '.[] | select(.path=="'"${REPO_PATH}"'") | .id')
+      
+          if [ -z "$repo_id" ]; then
+            echo "Repo not found!"
+            exit 1
+          fi
+      
           echo "repo_id=$repo_id" >> $GITHUB_OUTPUT
-
+      
       - name: Update Databricks Repo (Dev)
         run: |
           databricks repos update "${{ steps.get_repo.outputs.repo_id }}" \
@@ -84,9 +90,15 @@ jobs:
         id: get_repo
         run: |
           repo_id=$(databricks repos list --output json | \
-            jq -r '.repos[] | select(.path=="${{ env.REPO_PATH }}") | .id')
+            jq -r '.[] | select(.path=="'"${REPO_PATH}"'") | .id')
+      
+          if [ -z "$repo_id" ]; then
+            echo "Repo not found!"
+            exit 1
+          fi
+      
           echo "repo_id=$repo_id" >> $GITHUB_OUTPUT
-
+      
       - name: Update Databricks Repo (Prod)
         run: |
           databricks repos update "${{ steps.get_repo.outputs.repo_id }}" \
